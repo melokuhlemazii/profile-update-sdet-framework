@@ -7,7 +7,7 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.safari.SafariDriver;
 
-public class DriverFactory {
+public class BrowserFactory {
     static WebDriver driver;
 
     public static WebDriver StartBrowser(String browserChoice, String url) {
@@ -18,7 +18,7 @@ public class DriverFactory {
             driver = new ChromeDriver(chromeOptions);
         } else if (browserChoice.equalsIgnoreCase("edge")){
             edgeOptions.addArguments("--headless");
-            driver = new EdgeDriver();
+            driver = new EdgeDriver(edgeOptions);
         } else {
             driver = new SafariDriver();
         }
