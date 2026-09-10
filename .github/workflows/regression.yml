@@ -22,3 +22,6 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
           cache: maven
+
+      - name: Build and Run Regression Tests
+        run: mvn clean test -Dheadless=true
