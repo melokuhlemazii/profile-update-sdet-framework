@@ -16,7 +16,7 @@ public class BrowserFactory {
         EdgeOptions edgeOptions = new EdgeOptions();
 
         if (browserChoice.equalsIgnoreCase("chrome")){
-            chromeOptions.addArguments("--headless");
+            //chromeOptions.addArguments("--headless");
             driver = new ChromeDriver(chromeOptions);
         } else if (browserChoice.equalsIgnoreCase("edge")){
             edgeOptions.addArguments("--headless");
@@ -25,7 +25,8 @@ public class BrowserFactory {
             driver = new SafariDriver();
         }
 
-        driver.manage().window().setSize(new Dimension(1920, 1080));
+        //driver.manage().window().setSize(new Dimension(1920, 1080));
+        driver.manage().window().maximize();
         driver.get(url);
 
         return driver;
