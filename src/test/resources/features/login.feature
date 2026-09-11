@@ -2,7 +2,7 @@
 Feature: login
 
 Scenario Outline: as a user i want to login to ndosi website
-    Given i am on the login page
+    Given I am on the login page
     And I enter email <email>
     And I enter password <password>
     When I click login button
