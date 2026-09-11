@@ -32,6 +32,22 @@ public class StepsDefinitions extends Base {
 
     }
 
+    @And("I click menu button")
+    public void i_click_menu_button(){
+        dashboardPage.verifyDashboardPageIsDisplayed();
+        dashboardPage.clickUserMenuButton_xpath();
+    }
+
+    @And("I click on the my profile")
+    public void i_click_on_my_profile(){
+        dashboardPage.clickMyProfile();
+    }
+
+    @And("I click on the edit profile button")
+    public void clickEditProfile(){
+        dashboardPage.clickEditProfile();
+    }
+
 }
 
 
