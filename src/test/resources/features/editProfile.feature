@@ -1,7 +1,7 @@
 @login @regression @sanity
 Feature: editProfile
 
-  Scenario Outline: as a user i want to login to ndosi website
+  Scenario Outline: login to ndosi website and update profile
     Given I am on the login page
     And I enter email <email>
     And I enter password <password>
@@ -10,6 +10,7 @@ Feature: editProfile
     And I click menu button
     And I click on the my profile
     And I click on the edit profile button
+    And I click on choose photo
     Examples:
       | email                     | password  |
       | melomazibuko8@gmail.com   | Mwelase@1031 |

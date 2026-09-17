@@ -10,7 +10,7 @@ import java.time.Duration;
 import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOf;
 
 public class LoginPage {
-    static WebDriver driver;
+     WebDriver driver;
 
     @FindBy(xpath = "//span[normalize-space()='Access Learning Materials']")
     WebElement loginHeading_xpath;

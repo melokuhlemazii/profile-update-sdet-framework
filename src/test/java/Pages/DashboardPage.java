@@ -25,9 +25,6 @@ public class DashboardPage {
     @FindBy(xpath = "//span[normalize-space()='My Profile']")
     WebElement myProfile_xpath;
 
-    @FindBy(xpath = "//*[@id=\"app-main-content\"]/section/div/div[1]/div[9]/button[1]")
-    WebElement editProfile;
-
     public void verifyDashboardPageIsDisplayed(){
         new WebDriverWait(driver, Duration.ofSeconds(15)).until(visibilityOf(dashboardHeading_xpath));
         dashboardHeading_xpath.isDisplayed();
@@ -41,11 +38,6 @@ public class DashboardPage {
     public void clickMyProfile(){
         new WebDriverWait(driver, Duration.ofSeconds(15)).until(visibilityOf(myProfile_xpath));
         myProfile_xpath.click();
-    }
-
-    public void clickEditProfile(){
-        new WebDriverWait(driver, Duration.ofSeconds(15)).until(visibilityOf(editProfile));
-        editProfile.click();
     }
 
 }

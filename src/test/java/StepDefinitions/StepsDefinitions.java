@@ -1,9 +1,11 @@
 package StepDefinitions;
 
+import Pages.ProfilePage;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.openqa.selenium.devtools.latest.profiler.model.Profile;
 
 public class StepsDefinitions extends Base {
 
@@ -45,7 +47,12 @@ public class StepsDefinitions extends Base {
 
     @And("I click on the edit profile button")
     public void clickEditProfile(){
-        dashboardPage.clickEditProfile();
+        profilePage.clickEditProfile();
+    }
+
+    @And("I click on choose photo")
+    public void clickChoosePhoto(){
+        profilePage.choosePhoto();
     }
 
 }
