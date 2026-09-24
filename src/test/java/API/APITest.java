@@ -10,10 +10,8 @@ import org.testng.annotations.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 
-/**
- * Base API Test class for direct API testing (without Cucumber)
- * Extend this class to create specific API test classes
- */
+//base API Test class for direct API testing (without Cucumber).
+// Extend this class to create specific API test classes
 public class APITest {
     protected APIManager apiManager;
 
@@ -34,9 +32,7 @@ public class APITest {
                 .body("success", equalTo(true));
     }
 
-    /**
-     * Template test for get profile endpoint
-     */
+    //Template test for get profile endpoint
     @Test
     public void testGetProfileEndpoint() {
         // TODO: Implement get profile test
@@ -46,9 +42,7 @@ public class APITest {
         // 4. Validate response contains profile data
     }
 
-    /**
-     * Template test for update profile endpoint
-     */
+    //Template test for update profile endpoint
     @Test
     public void testUpdateProfileEndpoint() {
         // TODO: Implement update profile test
@@ -59,9 +53,7 @@ public class APITest {
         // 5. Validate response contains updated data
     }
 
-    /**
-     * Template test for upload profile picture endpoint
-     */
+    //Template test for upload profile picture endpoint
     @Test
     public void testUploadProfilePictureEndpoint() {
         // TODO: Implement upload profile picture test
