@@ -1,8 +1,14 @@
 package API;
 
+import API.Payloads.LoginRequest;
+import API.RequestBuilders.LoginRequestBuilder;
 import io.restassured.response.Response;
+import org.json.simple.JSONObject;
+import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
+import static org.hamcrest.CoreMatchers.equalTo;
 
 /**
  * Base API Test class for direct API testing (without Cucumber)
@@ -13,20 +19,19 @@ public class APITest {
 
     @BeforeClass
     public void setUp() {
-        apiManager = new APIManager(APIEndpoints.BASE_URL);
+        apiManager = new APIManager(APIEndpoints.baseURL);
     }
 
-    /**
-     * Template test for login endpoint
-     * Replace endpoint URL and implement actual test logic
-     */
+    //login test
     @Test
-    public void testLoginEndpoint() {
-        // TODO: Implement login test
-        // 1. Create login request body with credentials
-        // 2. Send POST request to LOGIN_ENDPOINT
-        // 3. Validate response status code is 200
-        // 4. Extract and store auth token
+    public void userLoginTest(){
+
+        LoginRequestBuilder.loginUserResponse("melomazibuko8@gmail.com", "Mwelase@1031")
+                .then()
+                .log().all()
+                .assertThat()
+                .statusCode(200)
+                .body("success", equalTo(true));
     }
 
     /**
@@ -66,4 +71,34 @@ public class APITest {
         // 4. Validate response status code is 200 or 201
         // 5. Validate response confirms upload success
     }
+
+    /*
+    @Test(description = "Validate login endpoint returns token and HTTP 200")
+    public void testLoginEndpoint() {
+        String email = " ";
+        String password = " ";
+
+        JSONObject payload = LoginRequest.loginUserPayload(email, password);
+
+        Response response = apiManager.post(APIEndpoints.LOGIN_ENDPOINT, payload.toJSONString());
+
+        APIResponseValidator.validateStatusCode(response, 200);
+        APIResponseValidator.validateContentType(response, "application/json");
+
+        String token = null;
+        try {
+            token = response.jsonPath().getString("token");
+            if (token == null) {
+                token = response.jsonPath().getString("data.token");
+            }
+        } catch (Exception e) {
+            // ignore
+        }
+
+        Assert.assertNotNull(token, "Auth token not found in login response");
+        apiManager.setAuthToken(token);
+
+        APIResponseValidator.logResponse(response);
+    }
+       */
 }

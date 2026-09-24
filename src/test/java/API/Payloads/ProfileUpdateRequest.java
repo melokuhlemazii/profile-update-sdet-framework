@@ -1,4 +1,4 @@
 package API.Payloads;
 
-public class ProfileRequest {
+public class ProfileUpdateRequest {
 }

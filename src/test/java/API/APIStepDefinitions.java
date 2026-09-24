@@ -19,7 +19,7 @@ public class APIStepDefinitions {
 
     @Before
     public void setUp() {
-        apiManager = new APIManager(APIEndpoints.BASE_URL);
+        apiManager = new APIManager(APIEndpoints.baseURL);
     }
 
     // Login Steps
