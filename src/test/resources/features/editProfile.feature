@@ -10,7 +10,8 @@ Feature: editProfile
     And I click menu button
     And I click on the my profile
     And I click on the edit profile button
-    And I click on choose photo
+    And i upload a new profile picture "profilePhoto.jpeg"
+    And I click on the save changes button
     Examples:
       | email                     | password  |
       | melomazibuko8@gmail.com   | Mwelase@1031 |

@@ -50,11 +50,22 @@ public class StepsDefinitions extends Base {
         profilePage.clickEditProfile();
     }
 
-    @And("I click on choose photo")
-    public void clickChoosePhoto(){
-        profilePage.choosePhoto();
+    @And("i upload a new profile picture {string}")
+    public void i_upload_a_new_profile_picture(String fileName) {
+        profilePage.uploadNewProfilePicture(fileName);
     }
 
+    @And("I click on the save changes button")
+    public void i_click_save_changes(){
+        profilePage.saveChanges();
+    }
+
+    @Then("I should see an upload success message containing {string}")
+    public void i_should_see_upload_success_message_containing(String expected) {
+        String msg = profilePage.getUploadSuccessMessage(15);
+        org.junit.Assert.assertTrue("Expected success message to contain: " + expected + " but was: " + msg,
+                profilePage.isUploadSuccessMessageContains(expected, 15));
+    }
 }
 
 
