@@ -1,96 +1,109 @@
 package API;
 
-import API.Payloads.LoginRequest;
-import API.RequestBuilders.LoginRequestBuilder;
+import API.RequestBuilders.ApiRequestBuilder;
 import io.restassured.response.Response;
-import org.json.simple.JSONObject;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 import static org.hamcrest.CoreMatchers.equalTo;
 
-//base API Test class for direct API testing (without Cucumber).
-// Extend this class to create specific API test classes
 public class APITest {
-    protected APIManager apiManager;
+    private String email;
+    private String password;
+    private Path imagePath;
+    private ApiRequestBuilder api;
+    private String firstName;
+    private String lastName;
 
     @BeforeClass
-    public void setUp() {
-        apiManager = new APIManager(APIEndpoints.baseURL);
+    public void setup() {
+        email = "melomazibuko8@gmail.com";
+        password = "Mwelase@1031";
+        imagePath = Path.of(System.getProperty(
+                "api.profileImage",
+                "src/test/resources/images/profilePhoto.jpeg")).toAbsolutePath().normalize();
+
+        if (!Files.isRegularFile(imagePath)) {
+            throw new IllegalArgumentException("Profile image file does not exist: " + imagePath);
+        }
+        api = new ApiRequestBuilder();
     }
 
-    //login test
     @Test
-    public void userLoginTest(){
-
-        LoginRequestBuilder.loginUserResponse("melomazibuko8@gmail.com", "Mwelase@1031")
-                .then()
-                .log().all()
+    public void loginUserTest() {
+        Response response = api.loginUserResponse(email, password);
+        response.then()
                 .assertThat()
                 .statusCode(200)
                 .body("success", equalTo(true));
     }
 
-    //Template test for get profile endpoint
-    @Test
-    public void testGetProfileEndpoint() {
-        // TODO: Implement get profile test
-        // 1. Ensure auth token is set
-        // 2. Send GET request to GET_PROFILE_ENDPOINT
-        // 3. Validate response status code is 200
-        // 4. Validate response contains profile data
+    @Test(dependsOnMethods = "loginUserTest")
+    public void getProfileTest() {
+        Response response = api.getProfileResponse();
+        response.then()
+                .assertThat()
+                .statusCode(200);
+
+        firstName = firstNonBlank(
+                response.jsonPath().getString("data.firstName"),
+                response.jsonPath().getString("data.user.firstName"),
+                response.jsonPath().getString("data.FirstName"));
+        lastName = firstNonBlank(
+                response.jsonPath().getString("data.lastName"),
+                response.jsonPath().getString("data.user.lastName"),
+                response.jsonPath().getString("data.LastName"));
+
+        Assert.assertNotNull(firstName, "GET /APIDEV/profile should return firstName");
+        Assert.assertNotNull(lastName, "GET /APIDEV/profile should return lastName");
     }
 
-    //Template test for update profile endpoint
-    @Test
-    public void testUpdateProfileEndpoint() {
-        // TODO: Implement update profile test
-        // 1. Ensure auth token is set
-        // 2. Create profile update request body
-        // 3. Send PUT request to UPDATE_PROFILE_ENDPOINT
-        // 4. Validate response status code is 200 or 201
-        // 5. Validate response contains updated data
+    @Test(dependsOnMethods = "getProfileTest")
+    public void updateProfileTest() {
+        api.updateProfileResponse(firstName, lastName)
+                .then()
+                .assertThat()
+                .statusCode(200);
     }
 
-    //Template test for upload profile picture endpoint
-    @Test
-    public void testUploadProfilePictureEndpoint() {
-        // TODO: Implement upload profile picture test
-        // 1. Ensure auth token is set
-        // 2. Create multipart request with file
-        // 3. Send POST request to UPLOAD_PROFILE_PICTURE_ENDPOINT
-        // 4. Validate response status code is 200 or 201
-        // 5. Validate response confirms upload success
+    @Test(dependsOnMethods = "updateProfileTest")
+    public void uploadProfileImageTest() {
+        api.uploadProfileImageResponse(imagePath)
+                .then()
+                .assertThat()
+                .statusCode(200);
     }
 
-    /*
-    @Test(description = "Validate login endpoint returns token and HTTP 200")
-    public void testLoginEndpoint() {
-        String email = " ";
-        String password = " ";
+    @Test(dependsOnMethods = "uploadProfileImageTest")
+    public void verifyUpdatedProfileTest() {
+        Response response = api.getProfileResponse();
+        response.then()
+                .assertThat()
+                .statusCode(200);
 
-        JSONObject payload = LoginRequest.loginUserPayload(email, password);
+        String savedImage = firstNonBlank(
+                response.jsonPath().getString("data.profilePicture"),
+                response.jsonPath().getString("data.ProfilePicture"),
+                response.jsonPath().getString("data.profileImage"),
+                response.jsonPath().getString("data.ProfileImage"),
+                response.jsonPath().getString("data.profileImageUrl"),
+                response.jsonPath().getString("data.ProfileImageUrl"),
+                response.jsonPath().getString("data.imageUrl"),
+                response.jsonPath().getString("data.ImageUrl"));
 
-        Response response = apiManager.post(APIEndpoints.LOGIN_ENDPOINT, payload.toJSONString());
+        Assert.assertNotNull(savedImage, "Profile image should be present after upload");
+    }
 
-        APIResponseValidator.validateStatusCode(response, 200);
-        APIResponseValidator.validateContentType(response, "application/json");
-
-        String token = null;
-        try {
-            token = response.jsonPath().getString("token");
-            if (token == null) {
-                token = response.jsonPath().getString("data.token");
+    private String firstNonBlank(String... values) {
+        for (String value : values) {
+            if (value != null && !value.isBlank()) {
+                return value;
             }
-        } catch (Exception e) {
-            // ignore
         }
-
-        Assert.assertNotNull(token, "Auth token not found in login response");
-        apiManager.setAuthToken(token);
-
-        APIResponseValidator.logResponse(response);
+        return null;
     }
-       */
 }
