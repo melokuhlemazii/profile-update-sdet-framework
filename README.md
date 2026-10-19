@@ -6,7 +6,7 @@ This project automates the profile-update journey on the Ndosi Simplified Automa
 
 ### UI scenario
 
-The `@myProfile` scenario in `src/test/resources/features/myProfile.feature`:
+The `@editProfile` scenario in `src/test/resources/features/myProfile.feature`:
 
 1.  Opens the login page and signs in.
 2.  Opens the menu and navigates to My Profile.
